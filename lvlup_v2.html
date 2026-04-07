@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang ="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LVL UP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+  
+ * {
+    margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+   }
+   
+   :root {
+   --cor-rank: #38bdf8;
+   --cor-main: #ef4444;
+   --cor-side: #38bdf8;
+   --cor-bg:   #0a0f1a;
+   }
+   
+   body {
+    background-color: var(--cor-bg);
+	background-image:
+     linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px),
+     linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px);
+	background-size: 40px 40px;
+	color: #e2e8f0;
+	font-family: 'Rajdhani', sans-serif;
+	min-height: 100vh;
+	display: flex;
+	justify-content: center;
+	padding: 30px 16px;
+	}
+	
+	#app {
+	  width: 100%;
+	  max-width: 420px;
+	  display: flex;
+	  flex-direction: column;
+	  gap: 16px;
+	  }
+	  
+	/* --Título-- */
+	#titulo {
+	  font-family: 'Orbitron', sans-serif;
+	  font-size: 42px;
+	  font-weight: 900;
+	  text-align: center;
+	  color: #fff;
+	  text-shadow:
+	    0 0 10px var(--cor-rank),
+		0 0 30px var(--cor-rank),
+		0 0 60px var(--cor-rank);
+	  letter-spacing: 4px;
+	 }
+	 
+	/* -- Header Stats -- */
+	#header {
+	  display: flex;
+	  justify-content: space-between;
+	  gap: 10px;
+	 }
+	 
+	.header-stat {
+	  flex: 1;
+	  display: flex;
+	  flex-direction: column;
+	  align-items: center;
+	  gap: 4px;
+	 }
+	 
+	.stat-label {
+	  font-family: 'Orbitron', sans-serif;
+	  font-size: 9px;
+	  color: #64748b;
+	  letter-spacing: 2px;
+	 }
+	 
+	.stat-valor {
+	  font-family: 'Orbitron', sans-serif;
+	  font-size: 16px;
+	  font-weight: 700;
+	  color: var(--cor-rank);
+	 }
+	
+	.mini-barra {
+	  width: 100%;
+	  height: 3px;
+	  background: #1e293b;
+	  border-radius: 10px;
+	  overflow: hidden;
+	 }
+	 
+	.mini-fill {
+	  height: 100%;
+	  width: 0%;
+	  background: var(--cor-rank);
+	  border-radius: 10px;
+	  transition: width 0.4s ease;
+	 }
+	 
+	/* -- Quest card -- */
+	#questCard {
+	  background: rgba(15, 23, 42, 0.85);
+	  border: 1px solid #1e293b;
+	  border-radius: 20px;
+	  padding: 20px 16px;
+	  display: flex;
+	  flex-direction: column;
+	  gap: 10px;
+	  backdrop-filter: blur(10px);
+	 }
+	 
+	#questTitulo {
+	  font-family: 'Orbitron', sans-serif;
+	  font-size: 18px;
+	  text-align: center;
+	  color: #fff;
+	  letter-spacing: 3px;
+	 }
+	 
+	#questDivider {
+	  height:2px;
+	  background: linear-gradient(90deg, var(--cor-main), var(--cor-side));
+	  border-radius: 10px;
+	  margin-bottom: 4px;
+	 }
+	 
+	.quest-categoria {
+	  font-family: 'Orbitron', sans-serif;
+	  font-size: 11px;
+      letter-spacing: 2px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+	
+	.quest-categoria.main { color: var(--cor-main); }
+	.quest-categoria.side { color: var(--cor-side); }
+	
+	/* -- Quest Item -- */
+	.quest-item {
+	  display: flex;
+	  align-items: center;
+	  gap: 12px;
+	  background: rgba(30, 41, 59, 0.6);
+	  border-radius: 12px;
+	  padding: 12px 14px;
+	  cursor: pointer;
+	  transition: all 0.2s ease;
+	  font-size: 15px;
+	  font-weight: 600;
+	 }
+	 
+	.quest-item:hover {
+	  border-color: var(--cor-rank);
+	  background: rgba(56,189,248,0.05);
+	 }
+	 
+	.quest-item.feita {
+	  opacity: 0.4;
+	  cursor: not-allowed;
+	  border-color: #1e293b;
+	 }
+	 
+	.quest-check {
+	  width: 20px;
+	  height: 20px;
+	  border: 2px solid #475569;
+	  border-radius: 5px;
+	  flex-shrink: 0;
+	  transition: all 0.2s ease;
+	  display: flex;
+	  align-items: center;
+	  justify-content: center;
+	 }
+	 
+	.quest-item.feita .quest-check {
+	  background: #22c55e;
+	  border-color: #22c55e;
+	 }
+	 
+	.quest-item.feita .quest-check::after {
+	  content: '✓';
+	  color: white;
+	  font-size: 13px;
+	  font-weight: bold;
+	 }
+	 
+	.xp-tag {
+	  font-size: 12px;
+	  color: #64748b;
+	  margin-left: 4px;
+	 }
+	 
+	/* -- Today Card -- */
+	#todayCard {
+	  background: rgba(15, 23, 42, 0.85);
+	  border: 1px solid #1e293b;
+	  border-radius: 16px;
+	  padding: 16px;
+	  backdrop-filter: blur(10px);
+	 }
+	 
+	#todayLabel {
+	  font-family: 'Orbitron', sans-serif;
+	  font-size: 13px;
+	  letter-spacing: 2px;
+	  margin-bottom: 10px;
+	  color: #fff;
+	 }
+	 
+	#todayXP   { color: var(--cor-main); }
+ 	#todayMeta { color: var(--cor-side); }
+	
+	#todayBarra {
+	  width: 100%;
+	  height: 8px;
+	  background: #1e293b;
+	  border-radius: 10px;
+	  overflow: hidden;
+	 }
+	 
+	   #todayFill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--cor-main), var(--cor-side));
+      border-radius: 10px;
+      transition: width 0.4s ease;
+    }
+
+    /* ── Ações ── */
+    #acoes {
+      display: flex;
+      gap: 10px;
+    }
+
+    #acoes button {
+      flex: 1;
+      background: transparent;
+      border: 2px solid var(--cor-rank);
+      color: var(--cor-rank);
+      padding: 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+    }
+
+    #acoes button:hover {
+      background: var(--cor-rank);
+      color: #0a0f1a;
+      box-shadow: 0 0 20px var(--cor-rank);
+    }
+
+    #acoes button:active { transform: scale(0.97); }
+
+    /* ── Status ── */
+    #status {
+      text-align: center;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: #64748b;
+      min-height: 20px;
+    }
+
+    /* ── Level Up Effect ── */
+    #levelUpEffect {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(0.5);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 48px;
+      font-weight: 900;
+      color: #fff;
+      opacity: 0;
+      pointer-events: none;
+      text-shadow: 0 0 20px var(--cor-rank), 0 0 60px var(--cor-rank);
+      transition: all 0.4s ease;
+      z-index: 999;
+    }
+
+    #levelUpEffect.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+	
+  </style>	 
+</head>
+<body>
+
+    <div id="app">
+  
+    <h1 id="titulo">LVL UP</h1>
+	
+	<div id="header">
+	  <div class="header-stat">
+	    <span class="stat-label">LEVEL</span>
+		<span class="stat-valor" id="headerLevel">01</span>
+		<div class="mini-barra"><div class="mini-fill" id="miniLevel"></div></div>
+	</div>
+	<div class="header-stat">
+	   <span class="stat-label">XP</span>
+	   <span class="stat-valor" id="headerXP">0/100</span>
+	   <div class="mini-barra"><div class="mini-fill" id="miniXP"></div></div>
+	</div>
+	<div class="header-stat">
+	   <span class="stat-label">STREAK</span>
+	   <span class="stat-valor" id="headerStreak">0 🔥</span>
+	   <div class="mini-barra"><div class="mini-fill" id="miniStreak"></div></div>
+	</div>
+</div>
+
+	<div id="questCard">
+	
+	   <h2 id="questTitulo">DAILY QUESTS</h2>
+	   <div id="questDivider"></div>
+	   
+	   <p class="quest-categoria main">⚔ MAIN QUESTS</p>
+	   <div id="mainQuests">
+	    <div class="quest-item" id="work"     onclick="ganharXP(30, 'Work ⌚️',      'work'     )">
+		  <div class="quest-check" id="check-work"></div>
+		  <span>Work ⌚️ <span class="xp-tag">+30 XP</span></span>
+		</div>
+		<div class="quest-item" id="physical"     onclick="ganharXP(30, 'Physical 💪',      'physical'     )">
+		  <div class="quest-check" id="check-pshysical"></div>
+		  <span>Physical Training 💪 <span class="xp-tag">+30 XP</span></span>
+		</div>
+	</div>
+	
+	<p class="quest-categoria side">◈ SIDE QUESTS</p>
+	<div id="sideQuests">
+	  <div class="quest-item" id="create"     onclick="ganharXP(15, 'Create 🎨',      'create'   )">
+	    <div class="quest-check" id="check-create"></div>
+		<span>Create 🎨 <span class="xp-tag">+15 XP</span></span>
+	</div>
+	<div class="quest-item" id="study"     onclick="ganharXP(15, 'Study 📚',      'study'   )">
+	    <div class="quest-check" id="check-study"></div>
+		<span>Study 📚 <span class="xp-tag">+15 XP</span></span>
+	</div>
+	<div class="quest-item" id="language"     onclick="ganharXP(15, 'Language 🗣',      'language'   )">
+	    <div class="quest-check" id="check-language"></div>
+		<span>Language Practice 🗣 <span class="xp-tag">+15 XP</span></span>
+	</div>
+	<div class="quest-item" id="light"     onclick="ganharXP(15, 'Light 🧘',      'light'   )">
+	    <div class="quest-check" id="check-light"></div>
+		<span>Light Training 🧘 <span class="xp-tag">+15 XP</span></span>
+	</div>
+  </div>
+  
+ </div>
+ 
+ <div id="todayCard">
+   <p id="todayLabel">TODAY XP: <span id="todayXP">0</span> / <span id="todayMeta">80</span></p>
+   <div id="todayBarra">
+    <div id="todayFill"></div>
+   </div>
+ </div>
+ 
+ <div id="acoes">
+   <button onclick="finalizarDia()">FINALIZAR DIA</button>
+   <button onclick="abrirPerfil()">⚔ PERFIL</button>
+ </div>
+ 
+ <p id="status">...</p>
+ 
+ </div>
+ 
+ <audio id="levelUpSound" src="sounds/levelup.mp3"></audio>
+ <audio id="rankUpSound" src="sounds/rankup.mp3"></audio>
+ 
+ <div id="levelUpEffect">LEVEL UP!</div>
+ 
+ <!-- Modal Perfil vai aqui depois -->
+ 
+ <script>
+
+let xp = 0, streak = 0, level = 1, xpTotal = 0;
+let metaDiaria   = 80;
+let sistemaPronto = false;
+let questsFeitas  = JSON.parse(localStorage.getItem("questsFeitas"))    || {};
+let historico     = JSON.parse(localStorage.getItem("historico"))       || [];
+let rankAtual     = localStorage.getItem("rankAtual")                   || "";
+let questContadores = JSON.parse(localStorage.getItem("questContadores")) || {
+  "Work ⌚️": 0, "Physical 💪": 0, "Create 🎨": 0,
+  "Study 📚": 0, "Language 🗣": 0, "Light 🧘": 0
+};
+
+// ── Rank ────────────────────────────────────────────────────────────────
+function getRankInfo(lvl) {
+  if (lvl <= 5)  return { rank: "Bronze 🟫",  cor: "#ef4444", titulo: "Beta"      };
+  if (lvl <= 10) return { rank: "Prata ⚪",    cor: "#cbd5e1", titulo: "Noob"      };
+  if (lvl <= 20) return { rank: "Ouro 🟡",     cor: "#facc15", titulo: "Focado"    };
+  if (lvl <= 40) return { rank: "Elite 🔵",    cor: "#38bdf8", titulo: "Imparável" };
+  return           { rank: "Lendário 🟣", cor: "#a855f7", titulo: "Alpha"     };
+}
+
+function atualizarRank() {
+  let info = getRankInfo(level);
+  document.documentElement.style.setProperty("--cor-rank", info.cor);
+
+  if (info.rank !== rankAtual) {
+    if (sistemaPronto) {
+      let s = document.getElementById("rankUpSound");
+      if (s) { s.currentTime = 0; s.play().catch(e => console.log(e)); }
+
+      let bonus = 0;
+      if (info.rank.includes("Prata"))    bonus = 100;
+      if (info.rank.includes("Ouro"))     bonus = 250;
+      if (info.rank.includes("Elite"))    bonus = 500;
+      if (info.rank.includes("Lendário")) bonus = 1000;
+
+      if (bonus > 0) {
+        xpTotal += bonus;
+        salvarDados();
+        atualizarDisplay();
+        setStatus("NOVO RANK! +" + bonus + " XP DE BÔNUS! 🏆");
+      } else {
+        setStatus("NOVO RANK! 🏆");
+      }
+    }
+    rankAtual = info.rank;
+    localStorage.setItem("rankAtual", info.rank);
+  }
+}
+
+// ── Display ──────────────────────────────────────────────────────────────
+function atualizarDisplay() {
+  let progresso = xpTotal % 100;
+
+  document.getElementById("headerLevel").innerText  = String(level).padStart(2, "0");
+  document.getElementById("headerXP").innerText     = xpTotal + " / " + (level * 100);
+  document.getElementById("headerStreak").innerText = streak + " 🔥";
+  document.getElementById("miniXP").style.width     = progresso + "%";
+  document.getElementById("miniStreak").style.width = Math.min(streak * 10, 100) + "%";
+
+  let todayPct = Math.min((xp / metaDiaria) * 100, 100);
+  document.getElementById("todayXP").innerText        = xp;
+  document.getElementById("todayFill").style.width    = todayPct + "%";
+}
+
+function setStatus(msg, cor) {
+  let el = document.getElementById("status");
+  el.innerText    = msg;
+  el.style.color  = cor || "#64748b";
+}
+
+// ── Ganhar XP ────────────────────────────────────────────────────────────
+function ganharXP(valor, nome, id) {
+  let hoje = new Date().toDateString();
+
+  if (questsFeitas[nome] === hoje) {
+    setStatus(nome + " JÁ FEITO HOJE ❌", "#ef4444");
+    return;
+  }
+
+  xp      += valor;
+  xpTotal += valor;
+
+  questContadores[nome] = (questContadores[nome] || 0) + 1;
+  localStorage.setItem("questContadores", JSON.stringify(questContadores));
+
+  let item = document.getElementById(id);
+  item.classList.add("feita");
+  item.onclick = null;
+
+  questsFeitas[nome] = hoje;
+  localStorage.setItem("questsFeitas", JSON.stringify(questsFeitas));
+
+  setStatus(nome + " CONCLUÍDO ✔️", "#22c55e");
+  verificarLevel();
+  atualizarDisplay();
+  salvarDados();
+}
+
+// ── Verificar Level ───────────────────────────────────────────────────────
+function verificarLevel() {
+  while (xpTotal >= level * 100) {
+    level += 1;
+
+    let som = document.getElementById("levelUpSound");
+    som.currentTime = 0; som.play().catch(e => console.log(e));
+
+    atualizarRank();
+
+    let efeito = document.getElementById("levelUpEffect");
+    efeito.classList.add("show");
+    setTimeout(() => efeito.classList.remove("show"), 600);
+  }
+}
+
+// ── Finalizar Dia ─────────────────────────────────────────────────────────
+function finalizarDia() {
+  if (xp >= metaDiaria) {
+    streak += 1;
+    let maiorStreak = Number(localStorage.getItem("maiorStreak")) || 0;
+    if (streak > maiorStreak) localStorage.setItem("maiorStreak", streak);
+    setStatus("META BATIDA! 🔥", "#22c55e");
+  } else {
+    streak = 0;
+    xpTotal -= 50;
+    if (xpTotal < 0) xpTotal = 0;
+    setStatus("VOCÊ FALHOU! -50 XP 💀", "#ef4444");
+  }
+
+  let hoje      = new Date().toLocaleDateString();
+  let resultado = xp >= metaDiaria ? "Vitória 🔥" : "Derrota 💀";
+  historico.push({ data: hoje, xp: xp, resultado: resultado });
+  localStorage.setItem("historico", JSON.stringify(historico));
+
+  xp = 0;
+  atualizarDisplay();
+  salvarDados();
+  localStorage.setItem("ultimaData", new Date().toDateString());
+}
+
+// ── Risco ─────────────────────────────────────────────────────────────────
+function verificarRisco() {
+  let horas      = new Date().getHours();
+  let hoje       = new Date().toDateString();
+  let ultimaData = localStorage.getItem("ultimaData");
+
+  if (horas >= 20 && ultimaData !== hoje && xp < metaDiaria) {
+    setStatus("⚠️ RISCO! BATA A META ANTES DA MEIA NOITE!", "#ef4444");
+  }
+}
+
+// ── Salvar ────────────────────────────────────────────────────────────────
+function salvarDados() {
+  localStorage.setItem("xpTotal", xpTotal);
+  localStorage.setItem("level",   level);
+  localStorage.setItem("streak",  streak);
+  localStorage.setItem("xp",      xp);
+  localStorage.setItem("ultimaData", new Date().toDateString());
+}
+
+// ── Carregar ──────────────────────────────────────────────────────────────
+function carregarDados() {
+  xpTotal = Number(localStorage.getItem("xpTotal")) || 0;
+  level   = Number(localStorage.getItem("level"))   || 1;
+  streak  = Number(localStorage.getItem("streak"))  || 0;
+  xp      = Number(localStorage.getItem("xp"))      || 0;
+
+  let ultimaData = localStorage.getItem("ultimaData");
+  let hoje       = new Date().toDateString();
+
+  if (ultimaData !== hoje) {
+    xp = 0;
+    questsFeitas = {};
+    localStorage.setItem("questsFeitas", JSON.stringify(questsFeitas));
+  }
+
+  let diferenca = (new Date(hoje) - new Date(ultimaData)) / (1000 * 60 * 60 * 24);
+  if (diferenca > 1) {
+    streak = 0;
+    let penalidade = level * 20;
+    xpTotal -= penalidade;
+    if (xpTotal < 0) xpTotal = 0;
+    setStatus("VOCÊ SUMIU! -" + penalidade + " XP 💀", "#ef4444");
+    salvarDados();
+  }
+
+  // marca quests já feitas hoje
+  let hoje2 = new Date().toDateString();
+  for (let nome in questsFeitas) {
+    if (questsFeitas[nome] === hoje2) {
+      let ids = {
+        "Work ⌚️":     "work",
+        "Physical 💪": "physical",
+        "Create 🎨":   "create",
+        "Study 📚":    "study",
+        "Language 🗣": "language",
+        "Light 🧘":    "light"
+      };
+      let el = document.getElementById(ids[nome]);
+      if (el) { el.classList.add("feita"); el.onclick = null; }
+    }
+  }
+
+  atualizarDisplay();
+  atualizarRank();
+  verificarRisco();
+}
+
+carregarDados();
+setTimeout(() => { sistemaPronto = true; }, 100);
+ 
+ </script>
+ 
+ </body>
+ </html>
+	
