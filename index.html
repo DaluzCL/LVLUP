@@ -234,33 +234,35 @@
 
     /* ── Ações ── */
     #acoes {
-      display: flex;
-      gap: 10px;
-    }
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 
     #acoes button {
-      flex: 1;
-      background: transparent;
-      border: 2px solid var(--cor-rank);
-      color: var(--cor-rank);
-      padding: 12px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 11px;
-      letter-spacing: 1px;
-      font-weight: 700;
-      transition: all 0.3s ease;
-    }
+  flex: 1;
+  min-width: 100px;
+  background: transparent;
+  border: 2px solid var(--cor-rank);
+  color: var(--cor-rank);
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
 
     #acoes button:hover {
-      background: var(--cor-rank);
-      color: #0a0f1a;
-      box-shadow: 0 0 20px var(--cor-rank);
-    }
+  background: var(--cor-rank);
+  color: #0a0f1a;
+  box-shadow: 0 0 20px var(--cor-rank);
+}
 
     #acoes button:active { transform: scale(0.97); }
-
+    
     /* ── Status ── */
     #status {
       text-align: center;
@@ -436,6 +438,95 @@
       transform: translate(-50%, -50%) scale(1.2);
     }
 	
+  #forgeOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+#forgeOverlay.aberto {
+  opacity: 1;
+  pointer-events: all;
+}
+
+#forgeModal {
+  background: rgba(10,15,26,0.97);
+  border: 1px solid var(--cor-rank);
+  border-radius: 20px;
+  padding: 24px 20px;
+  width: 90%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 0 40px var(--cor-rank);
+}
+
+#forgeTitulo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+  text-align: center;
+  color: var(--cor-rank);
+  text-shadow: 0 0 20px var(--cor-rank);
+  letter-spacing: 3px;
+}
+
+#forgeChat {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+#forgeInputArea {
+  display: flex;
+  gap: 8px;
+}
+
+#forgeInput {
+  flex: 1;
+  background: rgba(30,41,59,0.8);
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #e2e8f0;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 14px;
+  outline: none;
+}
+
+#forgeInput:focus {
+  border-color: var(--cor-rank);
+}
+
+#forgeInputArea button {
+  background: var(--cor-rank);
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  color: #0a0f1a;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#forgeInputArea button:hover {
+  opacity: 0.85;
+  box-shadow: 0 0 15px var(--cor-rank);
+}
+
   </style>	 
 </head>
 <body>
@@ -511,6 +602,7 @@
  <div id="acoes">
    <button id="btnFinalizar" onclick="finalizarDia()">FINALIZAR DIA</button>
    <button onclick="abrirPerfil()">⚔ PERFIL</button>
+   <button onclick="abrirForge()">⚡ FORGE</button>
  </div>
  
  <p id="status">...</p>
@@ -560,6 +652,22 @@
 
    </div>
  </div>
+
+ <div id="forgeOverlay" onclick="fecharForge()">
+    <div id="forgeModal" onclick="event.stopPropagation()">
+
+      <h2 id="forgeTitulo">⚡ FORGE</h2>
+      <div class="modal-divider"></div>
+
+      <div id="forgeChat"></div>
+
+      <div id="forgeInputArea">
+        <input type="text" id="forgeInput" placeholder="Fale com o FORGE..." />
+        <button onclick="enviarParaForge()">▶</button>      
+      </div>
+
+    </div>
+  </div>
 
  <script>
 
@@ -842,6 +950,111 @@ function fecharPerfil() {
  }
 
 
+//--- ABRIR FORGE ------------------------------------------------------------------------------
+ function abrirForge() {
+  document.getElementById("forgeOverlay").classList.add("aberto");
+  let chat = document.getElementById("forgeChat");
+  if (chat.children.length === 0) {
+    adicionarMensagem("FORGE está te avaliando...", "forge");
+    callForge("Avalie meu progresso atual e me dê um recado direto.").then(resposta => {  
+      chat.lastChild.innerText = resposta;    
+    }).catch(() => {
+      chat.lastChild.innerText = "Erro ao contatar FORGE.";
+    });
+  }
+ }
+
+//--- FECHAR FORGE --------------------------------------------------------------------------------
+function fecharForge() {
+  document.getElementById("forgeOverlay").classList.remove("aberto");
+}
+
+//--- Adicionar Mensagem ---------------------------------------------------------------------------
+function adicionarMensagem(texto, tipo) {
+  let chat = document.getElementById("forgeChat");
+  let msg = document.createElement("div");
+  msg.style.cssText = `
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  ${tipo === "forge"
+  ? "background: rgba(30,41,59,0.8); color: var(--cor-rank); border-left: 3px solid var(--cor-rank);"
+      : "background: rgba(56,189,248,0.08); color: #e2e8f0; text-align: right;"}
+    `;
+    msg.innerText = texto;
+    chat.appendChild(msg);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+//--- Enviar para FORGE ----------------------------------------------------------------------------
+async function enviarParaForge() {
+  let input = document.getElementById("forgeInput");
+  let texto = input.value.trim();
+  if (!texto) return;
+
+  adicionarMensagem(texto, "jogador");
+  input.value = "";
+
+  let btn = document.querySelector("#forgeInputArea button");
+  btn.disabled = true;
+  btn.innerText = "...";
+
+  adicionarMensagem("FORGE está processando...", "forge");
+  let chat = document.getElementById("forgeChat");
+  let placeholder = chat.lastChild;
+
+  try {
+    let resposta = await callForge(texto);
+    placeholder.innerText = resposta;
+  } catch (e) {
+    placeholder.innerText = "Erro ao contatar o FORGE. Tente novamente.";
+  }
+
+  btn.disabled = false;
+  btn.innerText = "▶";
+}
+
+ //--- Call FORGE ----------------------------------------------------------------------------------
+async function callForge(userMessage) {
+  const API_KEY = "COLOQUE_SUA_KEY_AQUI";
+
+  let questsHoje = Object.keys(questsFeitas).filter(
+    nome => questsFeitas[nome] === new Date().toDateString()
+  );
+
+  const playerContext = `
+    level: ${level}
+    XP Total: ${xpTotal}
+    Streak: ${streak} dias
+    XP hoje: ${xp}
+    Quests completadas hoje: ${questsHoje.join(", ") || "nenhuma"}
+    `;
+
+    const systemPrompt = `Você é o FORGE — mentor IA brutal e honesto de um app de produtividade gamificado chamado LVL UP. Seu tom é direto, guerreiro, sem papo furado. Você conhece os dados do jogador e usa isso. Você cobra quando ele falha. Reconhece vitórias mas já aponta o próximo desafio. Nunca é condescendente. Nunca é genérico. Sempre personalizado com os dados reais. Responda em português. Máximo 4 linhas.
+
+    Dados do jogador:
+    ${playerContext}`;
+
+      const response = await fetch("/api/claude", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "x-api-key": API_KEY,
+          "anthropic-version": "2023-06-01"
+        },
+         body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 300,
+      system: systemPrompt,
+      messages: [{ role: "user", content: userMessage }]
+      })
+    }); 
+
+    const data = await response.json();
+    return data.content[0].text;
+}
 
 carregarDados();
 setTimeout(() => { sistemaPronto = true; }, 100);

@@ -1,0 +1,7 @@
+[[redirects]]
+from = "/api/claude"
+to = "https://api.anthropic.com/v1/messages"
+  status = 200
+  force = true
+  [redirects.headers]
+    Access-Control-Allow-Origin = "*"
