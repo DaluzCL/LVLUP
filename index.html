@@ -846,6 +846,22 @@ function fecharPerfil() {
 carregarDados();
 setTimeout(() => { sistemaPronto = true; }, 100);
  
+// -- Notificações ----------------------------------------------------------------------
+function iniciarNotificacoes() {
+  if (!("Notification" in window)) return;
+  if (!("seriviceWorker" in navigator)) return;
+
+  Notification.requestPermission().then(perm => {
+    if (permissao === "granted") {
+      navigator.serviceWorker.ready.then(se => {
+        sw.active.postMessage({ tipo: "agendar"});
+      });
+    }
+  });
+}
+
+iniciarNotificacoes();
+
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js");
 }
