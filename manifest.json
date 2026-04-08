@@ -1,0 +1,19 @@
+{"name": "LVL UP",
+  "short_name": "LVLUP",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0f1a",
+  "theme_color": "#38bdf8",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
