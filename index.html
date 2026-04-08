@@ -509,7 +509,7 @@
  </div>
  
  <div id="acoes">
-   <button onclick="finalizarDia()">FINALIZAR DIA</button>
+   <button id="btnFinalizar" onclick="finalizarDia()">FINALIZAR DIA</button>
    <button onclick="abrirPerfil()">⚔ PERFIL</button>
  </div>
  
@@ -683,6 +683,15 @@ function verificarLevel() {
 
 // ── Finalizar Dia ─────────────────────────────────────────────────────────
 function finalizarDia() {
+
+  let hojeF = new Date().toDateString();
+  let jaFinalizado = localStorage.getItem("diaFinalizado");
+  if (jaFinalizado === hojeF) {
+    setStatus("DIA JÁ FINALIZADO ❌", "#ef4444");
+    return;
+  }
+  localStorage.setItem("diaFinalizado", hojeF);
+
   if (xp >= metaDiaria) {
     streak += 1;
     let maiorStreak = Number(localStorage.getItem("maiorStreak")) || 0;
@@ -704,6 +713,11 @@ function finalizarDia() {
   atualizarDisplay();
   salvarDados();
   localStorage.setItem("ultimaData", new Date().toDateString());
+
+  document.getElementById("btnFinalizar").disabled = true;
+  document.getElementById("btnFinalizar").style.opacity = "0.4";
+  document.getElementById("btnFinalizar").style.cursor = "not-allowed";
+
 }
 
 // ── Risco ─────────────────────────────────────────────────────────────────
@@ -767,6 +781,14 @@ function carregarDados() {
       let el = document.getElementById(ids[nome]);
       if (el) { el.classList.add("feita"); el.onclick = null; }
     }
+  }
+
+  let diaFinalizado = localStorage.getItem("diaFinalizado");
+  let hoje3 = new Date().toDateString();
+  if (diaFinalizado === hoje3) {
+    document.getElementById("btnFinalizar").disabled = true;
+    document.getElementById("btnFinalizar").style.opacity = "0.4";
+    document.getElementById("btnFinalizar").style.cursor = "not-allowed";
   }
 
   atualizarDisplay();
