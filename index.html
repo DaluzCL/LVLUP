@@ -268,6 +268,150 @@
       color: #64748b;
       min-height: 20px;
     }
+    /* -- Modal Perfil -- */
+    #modalOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    #modalOverlay.aberto {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    #modalPerfil {
+      background: rgba(10, 15, 26, 0.95);
+      border: 1px solid var(--cor-rank);
+      border-radius: 20px;
+      padding: 28px 24px;
+      width: 90%;
+      max-width: 380px;
+      max-height: 85vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 0 40px var(--cor-rank);
+      transform: scale(0.9);
+      transition: transform 0.3s ease; 
+    }
+
+    #modalOverlay.aberto #modalPerfil {
+     transform: scale(1);
+    }
+
+    #modalRank {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      text-align: center;
+      color: var(--cor-rank);
+      text-shadow: 0 0 20px var(--cor-rank);
+      letter-spacing: 3px;
+    }
+    
+    #modalTitulo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      text-align: center;
+      color: #64748b;
+      letter-spacing: 3px;
+    }
+
+    .modal-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cor-rank), transparent);
+    }
+
+    .modal-stat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      background: rgba(30,41,59,0.6);
+      border-radius: 12px;
+      padding: 10px 6px;
+    }
+
+    .modal-stat-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 8px;
+      color: #64748b;
+      letter-spacing: 2px;
+    }
+
+    .modal-stat-valor {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--cor-rank);
+    }
+
+    .modal-selection-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: #64748b;
+    }
+
+    .modal-quest-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(30,41,59,0.5);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.modal-quest-count {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 13px;
+  color: var(--cor-rank);
+}
+
+.modal-hist-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 6px 4px;
+  border-bottom: 1px solid #1e293b;
+}
+
+.modal-hist-vitoria { color: #22c55e; }
+.modal-hist-derrota { color: #ef4444; }
+
+#modalPerfil button {
+  margin-top: 4px;
+  background: transparent;
+  border: 2px solid var(--cor-rank);
+  color: var(--cor-rank);
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+
+#modalPerfil button:hover {
+  background: var(--cor-rank);
+  color: #0a0f1a;
+  box-shadow: 0 0 20px var(--cor-rank);
+}
 
     /* ── Level Up Effect ── */
     #levelUpEffect {
@@ -373,11 +517,48 @@
  
  <audio id="levelUpSound" src="sounds/levelup.mp3"></audio>
  <audio id="rankUpSound" src="sounds/rankup.mp3"></audio>
+ <audio id="questSound" src="sounds/quest.mp3"></audio>
  
  <div id="levelUpEffect">LEVEL UP!</div>
  
- <!-- Modal Perfil vai aqui depois -->
- 
+ <div id="modalOverlay" onclick="fecharPerfil()"> 
+   <div id="modalPerfil" onclick="event.stopPropagation()">
+
+     <h2 id="modalRank">BRONZE 🟫</h2>
+     <P id="modalTitulo">Beta</P>
+    
+    <div class="modal-divider"></div>
+
+    <div class="modal-stats">
+       <div class="modal-stat">
+        <span class="modal-stat-label">LEVEL</span>
+        <span class="modal-stat-valor" id="mLevel">01</span>
+    </div>
+    <div class="modal-stat">
+       <span class="modal-stat-label">XP TOTAL</span>
+       <span class="modal-stat-valor" id="mXP">0</span>
+    </div>
+   <div class="modal-stat">
+       <span class="modal-stat-label">MAIOR STREAK</span>
+       <span class="modal-stat-valor" id="mStreak">0 🔥</span>
+   </div>
+  </div>
+
+  <div class="modal-divider"></div>
+  
+  <p class="modal-selection-label">QUESTS COMPLETADAS</p>
+  <div id="mQuest"></div>
+
+  <div class="modal-divider"></div>
+
+  <p class="modal-selection-label">HISTÓRICO</p>
+  <div id="mHistorico"></div>
+  
+  <button onclick="fecharPerfil()">FECHAR</button>
+
+   </div>
+ </div>
+
  <script>
 
 let xp = 0, streak = 0, level = 1, xpTotal = 0;
@@ -461,6 +642,10 @@ function ganharXP(valor, nome, id) {
 
   xp      += valor;
   xpTotal += valor;
+
+  let som = document.getElementById("questSound");
+  som.currentTime = 0;
+  som.play().catch(e => console.log(e));
 
   questContadores[nome] = (questContadores[nome] || 0) + 1;
   localStorage.setItem("questContadores", JSON.stringify(questContadores));
@@ -586,6 +771,53 @@ function carregarDados() {
   atualizarRank();
   verificarRisco();
 }
+
+// -- Abrir Perfil ----------------------------------------------
+function abrirPerfil() {
+  let info = getRankInfo(level);
+  let maiorStreak = Number(localStorage.getItem("maiorStreak")) || 0;
+
+  document.getElementById("modalRank").innerText    = info.rank;
+  document.getElementById("modalTitulo").innerText  = info.titulo;
+  document.getElementById("mLevel").innerText       = String(level).padStart(2, "0");
+  document.getElementById("mXP").innerText          = xpTotal;
+  document.getElementById("mStreak").innerText      = maiorStreak + " 🔥";
+
+  //Quests completadas
+  let qDiv = document.getElementById("mQuest");
+  qDiv.innerHTML = "";
+  for (let nome in questContadores) {
+    let row = document.createElement("div");
+    row.className = "modal-quest-row";
+    row.innerHTML = `<span>${nome}</span><span class="modal-quest-count">${questContadores[nome]}x</span>`;
+    qDiv.appendChild(row);
+  }
+
+  // Histórico (ultimos 7 dias)
+ let hDiv = document.getElementById("mHistorico");
+ hDiv.innerHTML = "";
+ let ultimos = historico.slice(-7).reverse();
+ if (ultimos.length === 0) {
+   hDiv.innerHTML = `<p style="color:#64748b;font-size:13px">Nenhum dia finalizado ainda.</p>`;
+ } else {
+  ultimos.forEach(d => {
+    let row = document.createElement("div");
+    let cls = d.resultado.includes("Vitória") ? "modal-hist-vitoria" : "modal-hist-derrota";
+    row.className = "modal-hist-row";
+    row.innerHTML = `<span>${d.data}</span><span>${d.xp} XP</span><span class="${cls}">${d.resultado}</span>`;
+    hDiv.appendChild(row);
+  });
+ }
+
+ document.getElementById("modalOverlay").classList.add("aberto");
+}
+
+
+function fecharPerfil() {
+  document.getElementById("modalOverlay").classList.remove("aberto");
+ }
+
+
 
 carregarDados();
 setTimeout(() => { sistemaPronto = true; }, 100);
