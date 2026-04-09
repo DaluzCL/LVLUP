@@ -639,6 +639,8 @@ function setStatus(msg, cor) {
 function ganharXP(valor, nome, id) {
   let hoje = new Date().toDateString();
 
+  iniciarNotificacoes();
+
   if (questsFeitas[nome] === hoje) {
     setStatus(nome + " JÁ FEITO HOJE ❌", "#ef4444");
     return;
@@ -856,6 +858,14 @@ function iniciarNotificacoes() {
       navigator.serviceWorker.ready.then(se => {
         sw.active.postMessage({ tipo: "agendar"});
       });
+    } else if (Notification.permission !== "danied") {
+      Notification.requestPermission().then(permissao => {
+        if (permissao === "granted") {
+          navigator.serviceWorker.ready.then(sw => {
+            sw.active.postMessage({ tipo: "agendar"});
+          });
+        }
+      })
     }
   });
 }
