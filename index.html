@@ -852,26 +852,26 @@ setTimeout(() => { sistemaPronto = true; }, 100);
 // -- Notificações ----------------------------------------------------------------------
 function iniciarNotificacoes() {
   if (!("Notification" in window)) return;
-  if (!("seriviceWorker" in navigator)) return;
+  if (!("serviceWorker" in navigator)) return;
 
-  Notification.requestPermission().then(perm => {
+  Notification.requestPermission().then(permissao => {
     if (permissao === "granted") {
-      navigator.serviceWorker.ready.then(se => {
-        sw.active.postMessage({ tipo: "agendar"});
-      });
-    } else if (Notification.permission !== "danied") {
-      Notification.requestPermission().then(permissao => {
-        if (permissao === "granted") {
-          navigator.serviceWorker.ready.then(sw => {
-            sw.active.postMessage({ tipo: "agendar"});
-          });
+      navigator.serviceWorker.ready.then(sw => {
+        if (sw.active) {
+          sw.active.postMessage({ tipo: "agendar" });
+        } else {
+          console.log("service worker não está ativo ainda");
         }
-      })
+      });
     }
   });
 }
 
 iniciarNotificacoes();
+
+navigator.serviceWorker.ready.then(sw => {
+  if (sw.active) sw.active.postMessage({ tipo: "agendar" });
+});
 
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js");
