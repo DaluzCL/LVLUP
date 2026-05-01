@@ -16,7 +16,7 @@
 
 ## 🎮 O que é o LVL UP?
 
-LVL UP é um **Progressive Web App (PWA)** de produtividade gamificada. A ideia é simples: sua vida real vira um jogo. Você completa missões do dia a dia, ganha XP, sobe de level e evolui de rank — tudo com visual estilo RPG.
+LVL UP é um **Progressive Web App (PWA)** de produtividade gamificada. A ideia é simples: sua vida real vira um jogo. Você completa missões do dia a dia, ganha XP, sobe de level e evolui de rank, tudo com visual estilo RPG.
 
 Sem frescura. Sem enrolação. Ou você completa a meta ou perde XP.
 
@@ -70,6 +70,15 @@ Cada novo rank concede um **bônus de XP** automático.
 - Instalável como PWA no celular e desktop
 - 100% offline com Service Worker
 - Dados salvos localmente via localStorage
+- **⚡ FORGE** — mentor IA com personalidade brutalmente honesta, alimentado pela API da Anthropic via backend seguro
+
+---
+
+## ⚡ FORGE
+
+O FORGE é o mentor IA do LVL UP. Ele conhece seus dados reais: level, XP, streak, quests completadas — e te cobra quando você falha. Reconhece vitórias mas já aponta o próximo desafio. Sem papo furado.
+
+A comunicação com a API é feita via **Netlify Functions**, garantindo que a chave da API nunca fique exposta no código do frontend.
 
 ---
 
@@ -77,6 +86,8 @@ Cada novo rank concede um **bônus de XP** automático.
 
 - HTML, CSS e JavaScript puro
 - PWA com Service Worker
+- Netlify Functions (Node.js) para o backend do FORGE
+- API da Anthropic (Claude)
 - Hospedado no Netlify
 - Versionado no GitHub
 
@@ -84,8 +95,6 @@ Cada novo rank concede um **bônus de XP** automático.
 
 ## 🚀 Em desenvolvimento
 
-- [ ] FORGE — mentor IA com personalidade brutalmente honesta
-- [ ] Backend para a API do FORGE (Node.js)
 - [ ] Push notifications reais no celular
 - [ ] Sistema de conta e progresso na nuvem
 
@@ -93,6 +102,6 @@ Cada novo rank concede um **bônus de XP** automático.
 
 ## 👨‍💻 Autor
 
-Desenvolvido por **DaluzCL** — aprendendo a codar construindo coisas reais.
+Desenvolvido por **DaluzCL**, aprendendo a codar construindo coisas reais.
 
 [![GitHub](https://img.shields.io/badge/GitHub-DaluzCL-181717?style=flat&logo=github)](https://github.com/DaluzCL)
