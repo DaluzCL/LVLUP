@@ -1,0 +1,24 @@
+{
+  "name": "lvl-up.v2",
+  "version": "1.0.0",
+  "description": "> Transforme sua rotina em uma RPG. Complete missões diárias, suba de level e construa a melhor versão de você mesmo.",
+  "main": "sw.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DaluzCL/lvlup.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/DaluzCL/lvlup/issues"
+  },
+  "homepage": "https://github.com/DaluzCL/lvlup#readme",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.92.0"
+  }
+}
